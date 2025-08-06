@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Jasmine!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@400;700&display=swap');
+
+        /* Keyframes for animations */
+        @keyframes balloonFloat {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+            50% { transform: translateY(-50vh) rotate(5deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(-5deg); opacity: 0; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes glowingBorder {
+            0% { box-shadow: 0 0 5px #ffc0cb, 0 0 10px #ffc0cb, 0 0 15px #ffe4e1; }
+            50% { box-shadow: 0 0 10px #ffc0cb, 0 0 20px #ffc0cb, 0 0 30px #ffe4e1; }
+            100% { box-shadow: 0 0 5px #ffc0cb, 0 0 10px #ffc0cb, 0 0 15px #ffe4e1; }
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes confettiDrop {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0.5; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        /* Basic Body and Background Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fce4ec, #e0f7fa);
+            font-family: 'Playfair Display', serif;
+            color: #4b0082;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Preloader Screen */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fce4ec, #e0f7fa);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            transition: opacity 1s ease-out;
+        }
+        #preloader h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            color: #d81b60;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* Main Birthday Card Container */
+        .main-container {
+            display: none;
+            width: 90%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            opacity: 0;
+            animation: fadeIn 2s forwards, glowingBorder 3s infinite alternate;
+            animation-delay: 2.5s;
+        }
+        h2.name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: #c2185b;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            animation: bounceIn 1s ease forwards;
+            animation-delay: 3s;
+        }
+        p.message {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #880e4f;
+            white-space: pre-line;
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards;
+            animation-delay: 3.5s;
+        }
+
+        /* Decorative Images */
+        .decoration {
+            position: absolute;
+            opacity: 1;
+            z-index: 9;
+        }
+        .cupcake { top: 15%; left: 5%; transform: rotate(-15deg); }
+        .candle { top: 10%; right: 5%; transform: rotate(10deg); }
+        .star { top: 25%; left: 5%; animation: sparkle 2s infinite ease-in-out; }
+        .heart { bottom: 15%; right: 5%; animation: pulse 1.5s infinite; }
+        .balloon {
+            position: fixed;
+            bottom: -50px;
+            animation: balloonFloat 10s linear infinite;
+            z-index: 9;
+            opacity: 1;
+        }
+        .balloon:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .balloon:nth-child(2) { left: 30%; animation-delay: 3s; }
+        .balloon:nth-child(3) { left: 50%; animation-delay: 6s; }
+        .balloon:nth-child(4) { left: 70%; animation-delay: 9s; }
+
+        /* Confetti Effect */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+            overflow: hidden;
+            display: none;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ffc0cb;
+            animation: confettiDrop 5s linear infinite;
+        }
+        .confetti:nth-child(2n) { background-color: #ffb6c1; }
+        .confetti:nth-child(3n) { background-color: #e6e6fa; }
+        .confetti:nth-child(4n) { background-color: #fff0f5; }
+
+        /* Button Styling */
+        .wish-button {
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-family: 'Playfair Display', serif;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: bounceIn 1s ease forwards;
+            animation-delay: 4s;
+            opacity: 0;
+        }
+        .wish-button:hover {
+            background-color: #d81b60;
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .wish-button:active {
+            transform: scale(1);
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem !important; }
+            h2.name { font-size: 2.5rem; }
+            p.message { font-size: 1rem; }
+            .wish-button { padding: 10px 20px; font-size: 1rem; }
+            .main-container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="birthday-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="preloader">
+        <h1>Happy Birthday Jasmine!</h1>
+    </div>
+
+    <div class="main-container" id="main-card">
+        <h2 class="name">Dearest Jasmine Laskar,</h2>
+        <p class="message">
+            On this day, a star was born,
+            A gentle soul, a new-found dawn.
+            May your path be lined with light,
+            And every day be warm and bright.
+            Like a fairy in a field of dreams,
+            Shine on, with all your beautiful gleams.
+            Happy Birthday to you, a wish so true,
+            For all the joy the world can give to you.<br><br>
+            With lots of love,<br>
+            Mallik Mohammad Musaddiq
+        </p>
+        <button class="wish-button" id="wish-button">Make a Wish</button>
+    </div>
+
+    <img src="https://assets.stickpng.com/images/580b57fbd808c13d902c676d.png" alt="Cupcake" class="decoration cupcake" style="width: 100px;">
+    <img src="https://png.pngtree.com/png-vector/20220616/ourmid/pngtree-birthday-candle-icon-png-image_5062590.png" alt="Candle" class="decoration candle" style="width: 50px;">
+    <img src="https://png.pngtree.com/png-clipart/20190516/original/pngtree-star-vector-icon-png-image_3655167.jpg" alt="Star" class="decoration star" style="width: 40px;">
+    <img src="https://www.pngall.com/wp-content/uploads/2/Heart-PNG-Images.png" alt="Heart" class="decoration heart" style="width: 60px;">
+
+    <img src="https://png.pngtree.com/png-vector/20230227/ourmid/pngtree-pink-balloon-illustration-free-png-image_6620579.png" alt="Balloon" class="balloon" style="width: 80px;">
+    <img src="https://www.pngall.com/wp-content/uploads/5/Pink-Balloon-PNG-Picture.png" alt="Balloon" class="balloon" style="width: 90px; animation-delay: 2s; left: 25%;">
+    <img src="https://png.pngtree.com/png-vector/20230227/ourmid/pngtree-pink-balloon-illustration-free-png-image_6620579.png" alt="Balloon" class="balloon" style="width: 100px; animation-delay: 4s; left: 60%;">
+    <img src="https://www.pngall.com/wp-content/uploads/5/Pink-Balloon-PNG-Pic.png" alt="Balloon" class="balloon" style="width: 70px; animation-delay: 7s; left: 85%;">
+
+    <div class="confetti-container" id="confetti-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            const mainCard = document.getElementById('main-card');
+            const wishButton = document.getElementById('wish-button');
+            const confettiContainer = document.getElementById('confetti-container');
+            const music = document.getElementById('birthday-music');
+
+            // Function to play music on user interaction
+            document.body.addEventListener('click', () => {
+                if (music.paused) {
+                    music.play().catch(error => {
+                        console.log('Autoplay was prevented. User needs to interact with the page to play music.');
+                    });
+                }
+            }, { once: true });
+
+            // Hide preloader and show main card after a delay
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                    mainCard.style.display = 'block';
+                }, 1000);
+            }, 2500);
+
+            // Handle wish button click
+            wishButton.addEventListener('click', () => {
+                confettiContainer.style.display = 'block';
+                createConfetti();
+                alert('Happy Birthday, Jasmine! Your wish is on its way!');
+            });
+
+            // Create dynamic confetti
+            function createConfetti() {
+                const colors = ['#ffc0cb', '#ffb6c1', '#e6e6fa', '#fff0f5', '#ff69b4', '#db7093'];
+                const shapes = ['square', 'circle', 'triangle']; // Added shapes for variety
+                for (let i = 0; i < 150; i++) { // Increased confetti count
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.width = `${Math.random() * 8 + 5}px`; // Random width
+                    confetti.style.height = `${Math.random() * 8 + 5}px`; // Random height
+                    confetti.style.animationDelay = `${Math.random() * 5}s`;
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`; // Random rotation
+                    confettiContainer.appendChild(confetti);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
